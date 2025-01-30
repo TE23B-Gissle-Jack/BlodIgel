@@ -15,6 +15,8 @@ public class Enemy
     public Vector2 position; 
     public Vector2 size;
 
+    public bool alive = true;
+
     public Enemy(Vector2 p, int h, float s,Vector2 ss)
     {
         position = p;
@@ -27,9 +29,19 @@ public class Enemy
 
     public void Update(Player player)
     {
-        hitbox = new Rectangle(position,size);
-        double angle = Math.Atan2(position.Y - player.position.Y, position.X - player.position.X) * (180 / Math.PI);
 
-        Raylib.DrawRectanglePro(this.hitbox,this.size/2,(float)angle,Color.Red);
+        if (alive)
+        {
+            double angle = Math.Atan2(position.Y - player.position.Y, position.X - player.position.X) * (180 / Math.PI);
+            Raylib.DrawRectanglePro(this.hitbox,this.size/2,(float)angle,Color.Red);
+        }
+    }
+    public void takeDamage(int dmg)
+    {
+        hp-=dmg;
+        if (hp<=0)
+        {
+            alive = false;
+        }
     }
 }

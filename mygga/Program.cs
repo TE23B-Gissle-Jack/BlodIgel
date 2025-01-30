@@ -8,10 +8,10 @@ Raylib.SetTargetFPS(60);
 Player player = new Player(new (400,400),10, 2);
 
 
-List<Bullet> bullets = new List<Bullet>();
+List<Bullet> friendlyBullets = new List<Bullet>();
 List<Enemy> enemies = new List<Enemy>();
 
-enemies.Add(new Enemy(new(100,100),10,5,new(40,40)));
+enemies.Add(new Enemy(new(100,100),50,5,new(40,40)));
 
 while (!Raylib.WindowShouldClose())
 {
@@ -27,12 +27,20 @@ while (!Raylib.WindowShouldClose())
     player.hitbox = new Rectangle(player.position,player.size);
     if(Raylib.IsMouseButtonPressed(MouseButton.Left))
     {
-        bullets.Add(player.Attack((float)angle));
+        player.Attack((float)angle,friendlyBullets);
     }
     
-    for (int i = 0; i < bullets.Count; i++)
+    for (int i = 0; i < friendlyBullets.Count; i++)
     {
-        bullets[i].Update();
+        friendlyBullets[i].Update();
+        for (int j = 0; j < enemies.Count; j++)
+        {
+            if (enemies[j].alive)
+            {
+                int damageTaken = friendlyBullets[i].CheckCollide(enemies[j].hitbox);
+                enemies[j].takeDamage(damageTaken);
+            }
+        }
     }
     for (int i = 0; i < enemies.Count; i++)
     {
