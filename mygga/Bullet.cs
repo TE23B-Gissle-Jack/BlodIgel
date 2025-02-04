@@ -24,9 +24,10 @@ public class Bullet(bool friendly, Vector2 position, Vector2 velocity)
         }
     }
 
-    public int CheckCollide(Rectangle target)
+    public int CheckCollide(Vector2 targetPosition, float tragetSize)
     {
-        if (Raylib.CheckCollisionCircleRec(position,5,target))
+        //Raylib.DrawCircleV(targetPosition,tragetSize/2,Color.Blue);
+        if (Raylib.CheckCollisionCircles(position,5,targetPosition,tragetSize/2))
         {
             collisions++;
             if (collisions>piercing)

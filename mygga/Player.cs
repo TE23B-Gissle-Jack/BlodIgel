@@ -15,6 +15,9 @@ public class Player
 
     int bulletTokill = 0;
 
+    int level = 0;
+    public int exp = 0;
+
     public Player(Vector2 p, int h, float s)
     {
         position = p;
@@ -76,3 +79,4 @@ public class Player
         }
     }
 }
+
