@@ -4,6 +4,8 @@ using Raylib_cs;
 
 Raylib.InitWindow(800,800,"Surfare");
 Raylib.SetTargetFPS(60);
+int screenHeight = Raylib.GetScreenHeight();
+int screenWidth = Raylib.GetScreenWidth();
 
 Player player = new Player(new (400,400),10, 2);
 
@@ -12,9 +14,9 @@ List<Bullet> friendlyBullets = new List<Bullet>();
 List<Enemy> enemies = new List<Enemy>();
 List<Exp> expPoints = new List<Exp>();
 
-enemies.Add(new Enemy(new(400,300),50,5,new(40,40),expPoints));
-enemies.Add(new Enemy(new(300,300),50,5,new(40,40),expPoints));
-enemies.Add(new Enemy(new(500,300),50,5,new(40,40),expPoints));
+Enemy redSqr = new Enemy(new(500,300),50,5,new(40,40),expPoints,Color.Red);
+
+SpawnEnemies(4,redSqr);
 
 while (!Raylib.WindowShouldClose())
 {
@@ -51,12 +53,38 @@ while (!Raylib.WindowShouldClose())
     }
     for (int i = 0; i < enemies.Count; i++)
     {
-        enemies[i].Update(player);
+        enemies[i].Update(player,enemies);
     }
+    enemies.RemoveAll(e => e.alive == false);
     for (int i = 0; i < expPoints.Count; i++)
     {
         expPoints[i].Update(player);
     }
 
     Raylib.EndDrawing();
+}
+
+void SpawnEnemies(int amt, Enemy type)
+{
+    for (int i = 0; i < amt; i++)
+    {
+        int x;
+        int y;
+        int fan = Random.Shared.Next(0,4);
+        if (fan < 2)
+        {
+            y = Random.Shared.Next(0,screenHeight);
+            if (fan ==0) x = screenWidth;
+            else x = 0;
+        }
+        else 
+        {
+            x = Random.Shared.Next(0,screenWidth);
+            if (fan ==2) y = screenHeight;
+            else y = 0;
+        }
+        
+        Vector2 position = new Vector2(x,y);
+        enemies.Add(new Enemy(type,position));
+    }
 }
