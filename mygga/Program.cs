@@ -14,9 +14,11 @@ List<Bullet> friendlyBullets = new List<Bullet>();
 List<Enemy> enemies = new List<Enemy>();
 List<Exp> expPoints = new List<Exp>();
 
-Enemy redSqr = new Enemy(new(500,300),50,5,new(40,40),expPoints,Color.Red);
+Enemy redSqr = new Enemy(new(500,300),50,5,new(40,40),expPoints,Color.Red,"square");
+Enemy blueCirc = new Enemy(new(500,300),50,5,new(40,40),expPoints,Color.Blue,"triangle");
 
 SpawnEnemies(4,redSqr);
+SpawnEnemies(2,blueCirc);
 
 while (!Raylib.WindowShouldClose())
 {
