@@ -16,6 +16,7 @@ public class Player
     int bulletTokill = 0;
 
     int level = 0;
+    public int levelReq = 10;
     public int exp = 0;
 
     public Player(Vector2 p, int h, float s)
@@ -24,30 +25,49 @@ public class Player
         maxHp = h;
         speed = s;
         hp = maxHp;
-        size = new Vector2(50,50);
+        size = new Vector2(50, 50);
         hitbox = new Rectangle(position, size);
+    }
+
+    public void Update(List<Bullet> friendlyBullets)
+    {   
+        Movement();
+
+        Vector2 mousePos = Raylib.GetMousePosition();
+        double angle = Math.Atan2(mousePos.Y - hitbox.Y, mousePos.X - hitbox.X) * (180 / Math.PI);
+        Raylib.DrawRectanglePro(hitbox, size / 2, (float)angle, Color.DarkPurple);
+
+        if (exp >= levelReq)
+        {
+            LevelUp();
+        }
+        //hitbox = new Rectangle(position, size);
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+        {
+            Attack((float)angle, friendlyBullets);
+        }
     }
 
     public void Movement()
     {
-        if(Raylib.IsKeyDown(KeyboardKey.W))
+        if (Raylib.IsKeyDown(KeyboardKey.W))
         {
-            position.Y -= speed;
+            hitbox.Y -= speed;
         }
-        else if(Raylib.IsKeyDown(KeyboardKey.S))
+        else if (Raylib.IsKeyDown(KeyboardKey.S))
         {
-            
-            position.Y += speed;
+
+            hitbox.Y += speed;
         }
-        if(Raylib.IsKeyDown(KeyboardKey.A))
+        if (Raylib.IsKeyDown(KeyboardKey.A))
         {
-            
-            position.X -=speed;
+
+            hitbox.X -= speed;
         }
-        else if(Raylib.IsKeyDown(KeyboardKey.D))
+        else if (Raylib.IsKeyDown(KeyboardKey.D))
         {
-            
-            position.X += speed;
+
+            hitbox.X += speed;
         }
     }
     public void Attack(float angle, List<Bullet> bullets)
@@ -59,24 +79,31 @@ public class Player
         MathF.Cos(radians) * 10,  // X velocity
         MathF.Sin(radians) * 10   // Y velocity
     );
-        if (bullets.Count<=100)
+        if (bullets.Count <= 100)
         {
-            bullets.Add(new Bullet(true,this.position,vel));
+            bullets.Add(new Bullet(true, this.hitbox.Position, vel));
         }
         else
         {
-            bullets[bulletTokill].position = this.position;
+            bullets[bulletTokill].position = this.hitbox.Position;
             bullets[bulletTokill].velocity = vel;
             bullets[bulletTokill].alive = true;
-            if (bulletTokill<99)
+            if (bulletTokill < 99)
             {
                 bulletTokill++;
             }
             else
             {
-                bulletTokill=0;
+                bulletTokill = 0;
             }
         }
+    }
+    public void LevelUp()
+    {
+        //Console.Beep();
+        exp -= levelReq;
+        level++;
+        levelReq = (int)double.Round(levelReq * 1.5);
     }
 }
 

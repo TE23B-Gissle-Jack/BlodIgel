@@ -34,7 +34,7 @@ public class Bullet(bool friendly, Vector2 position, Vector2 velocity)
             {
                 alive = false;
             }
-            return 10;
+            return 100;
         }
         return 0;
     }

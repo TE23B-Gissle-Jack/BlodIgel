@@ -14,28 +14,25 @@ List<Bullet> friendlyBullets = new List<Bullet>();
 List<Enemy> enemies = new List<Enemy>();
 List<Exp> expPoints = new List<Exp>();
 
-Enemy redSqr = new Enemy(new(500,300),50,5,new(40,40),expPoints,Color.Red,"square");
-Enemy blueCirc = new Enemy(new(500,300),50,5,new(40,40),expPoints,Color.Blue,"triangle");
+Enemy redSqr = new Enemy(player,new(500,300),50,5,40,expPoints,Color.Red,"square");
+Enemy blueCirc = new Enemy(player,new(500,300),50,5,40,expPoints,Color.Blue,"circle");
+Enemy orangeRing = new Enemy(player,new(500,300),50,5,40,expPoints,Color.Orange,"ring");
+Enemy greenTriangle = new Enemy(player,new(500,300),50,5,30,expPoints,Color.Green,"triangle");
 
-SpawnEnemies(4,redSqr);
-SpawnEnemies(2,blueCirc);
+Enemy[] wave1 = [redSqr,blueCirc,greenTriangle,orangeRing];
+int[] wave1Amt = [10,10,10,10];
+SpawnEnemies(wave1Amt,wave1);
+
 
 while (!Raylib.WindowShouldClose())
 {
     Raylib.BeginDrawing();
 
     Raylib.ClearBackground(Color.Black);
-    player.Movement();
     //Raylib.DrawRectangleRec(player.hitbox,Color.DarkPurple);
-    Vector2 mousePos = Raylib.GetMousePosition();
-    double angle = Math.Atan2(mousePos.Y - player.position.Y, mousePos.X - player.position.X) * (180 / Math.PI);
 
-    Raylib.DrawRectanglePro(player.hitbox,player.size/2,(float)angle,Color.DarkPurple);
-    player.hitbox = new Rectangle(player.position,player.size);
-    if(Raylib.IsMouseButtonPressed(MouseButton.Left))
-    {
-        player.Attack((float)angle,friendlyBullets);
-    }
+
+    player.Update(friendlyBullets);
     
     for (int i = 0; i < friendlyBullets.Count; i++)
     {
@@ -47,7 +44,7 @@ while (!Raylib.WindowShouldClose())
                 Enemy enemy = enemies[j];
                 if (enemies[j].alive)
                 {
-                    int damageTaken = friendlyBullets[i].CheckCollide(enemy.hitbox.Position,enemy.size.X);
+                    int damageTaken = friendlyBullets[i].CheckCollide(enemy.hitbox.Position,enemy.size);
                     enemy.takeDamage(damageTaken);
                 }
             }
@@ -55,7 +52,7 @@ while (!Raylib.WindowShouldClose())
     }
     for (int i = 0; i < enemies.Count; i++)
     {
-        enemies[i].Update(player,enemies);
+        enemies[i].Update(enemies);
     }
     enemies.RemoveAll(e => e.alive == false);
     for (int i = 0; i < expPoints.Count; i++)
@@ -66,9 +63,11 @@ while (!Raylib.WindowShouldClose())
     Raylib.EndDrawing();
 }
 
-void SpawnEnemies(int amt, Enemy type)
+void SpawnEnemies(int[] amt, Enemy[] type)
 {
-    for (int i = 0; i < amt; i++)
+    for (int i = 0; i < amt.Length; i++)
+    {
+        for (int j = 0; j < amt[i]; j++)
     {
         int x;
         int y;
@@ -87,6 +86,8 @@ void SpawnEnemies(int amt, Enemy type)
         }
         
         Vector2 position = new Vector2(x,y);
-        enemies.Add(new Enemy(type,position));
+        enemies.Add(new Enemy(type[i],position));
     }
+    }
+    
 }

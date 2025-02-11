@@ -12,7 +12,7 @@ public class Exp(int dropLevel,Vector2 position,List<Exp> expList)
     public void Update(Player player)
     {
         Raylib.DrawCircleV(position,5,color[dropLevel]);
-        if(Raylib.CheckCollisionCircles(position,5,player.position,player.size.X))
+        if(Raylib.CheckCollisionCircles(position,5,player.hitbox.Position,player.size.X))
         {
          PickUp(player);
         }
