@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using Raylib_cs;
 
 namespace mygga;
@@ -30,7 +31,7 @@ public class Player
     }
 
     public void Update(List<Bullet> friendlyBullets)
-    {   
+    {
         Movement();
 
         Vector2 mousePos = Raylib.GetMousePosition();
@@ -70,31 +71,34 @@ public class Player
             hitbox.X += speed;
         }
     }
+
     public void Attack(float angle, List<Bullet> bullets)
     {
         float radians = angle * (MathF.PI / 180f);
+        bool gun=false , shotgun=true;
 
-        // Create velocity vector
-        Vector2 vel = new Vector2(
-        MathF.Cos(radians) * 10,  // X velocity
-        MathF.Sin(radians) * 10   // Y velocity
-    );
-        if (bullets.Count <= 100)
+        if(shotgun)
         {
-            bullets.Add(new Bullet(true, this.hitbox.Position, vel));
+            Shotgun(100,9);
         }
-        else
+
+
+        void Gun(int dmg)
         {
-            bullets[bulletTokill].position = this.hitbox.Position;
-            bullets[bulletTokill].velocity = vel;
-            bullets[bulletTokill].alive = true;
-            if (bulletTokill < 99)
-            {
-                bulletTokill++;
-            }
-            else
-            {
-                bulletTokill = 0;
+            
+            int piercing;
+            MakeBullet(bullets, radians,dmg);
+        }
+        void Shotgun(int dmg, int amt)
+        {
+            float diffAngle = 5*(MathF.PI / 180f);
+            int piercing;
+            if(amt%2==0) radians-=diffAngle*amt/2;
+            else radians-=diffAngle*(int)(amt/2);
+            for (int i = 0; i < amt; i++)
+            {   
+                radians+=diffAngle;
+                MakeBullet(bullets, radians, dmg);
             }
         }
     }
@@ -104,6 +108,34 @@ public class Player
         exp -= levelReq;
         level++;
         levelReq = (int)double.Round(levelReq * 1.5);
+    }
+    public void MakeBullet(List<Bullet> bullets, float radians, int dmg)
+    {
+        int maxBullets = 1000;
+        // Create velocity vector
+        Vector2 vel = new Vector2(
+        MathF.Cos(radians) * 10,  // X velocity
+        MathF.Sin(radians) * 10   // Y velocity
+        );
+        if (bullets.Count <= maxBullets)
+        {
+            bullets.Add(new Bullet(true, this.hitbox.Position, vel, dmg));
+        }
+        else
+        {
+            bullets[bulletTokill].position = this.hitbox.Position;
+            bullets[bulletTokill].velocity = vel;
+            bullets[bulletTokill].alive = true;
+            bullets[bulletTokill].dmg = dmg;
+            if (bulletTokill < maxBullets - 1)
+            {
+                bulletTokill++;
+            }
+            else
+            {
+                bulletTokill = 0;
+            }
+        }
     }
 }
 

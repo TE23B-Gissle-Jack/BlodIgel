@@ -25,7 +25,7 @@ public class Enemy
     Color color;
     Player player;
     //enemy template
-    public Enemy(Player hero,Vector2 p, int h, float s, float ss, List<Exp> exp, Color colo, string type)
+    public Enemy(Player hero, Vector2 p, int h, float s, float ss, List<Exp> exp, Color colo, string type)
     {
         //position = p;
         maxHp = h;
@@ -48,7 +48,7 @@ public class Enemy
         this.size = other.size;
         this.expList = other.expList;
         this.color = other.color;
-        hitbox = new Rectangle(position, new(size,size));
+        hitbox = new Rectangle(position, new(size, size));
         this.shape = other.shape;
         this.player = other.player;
     }
@@ -75,6 +75,7 @@ public class Enemy
         );
         hitbox.Position -= vel;
     }
+
     public void takeDamage(int dmg)
     {
         hp -= dmg;
@@ -88,7 +89,7 @@ public class Enemy
     {
         expList.Add(new Exp(difficulty, hitbox.Position, expList));
         alive = false;
-        hitbox.Position = new (float.MinValue,float.MinValue); //stupid, but who cares
+        hitbox.Position = new(float.MinValue, float.MinValue); //stupid, but who cares
     }
 
     public void CheckDistans(List<Enemy> enemies)
@@ -97,8 +98,8 @@ public class Enemy
         {
             Enemy target = enemies[i];
             float distance = Vector2.Distance(target.hitbox.Position, this.hitbox.Position);
-            bool fuckYou = target!=this;
-            if (distance < this.size/2+target.size/2&&target!=null&&target!=this)//while but to jumpy
+            bool fuckYou = target != this;
+            if (distance < this.size / 2 + target.size / 2 && target != null && target != this)//while but to jumpy
             {
                 //Raylib.DrawCircle(400,400,20,Color.DarkGreen);
                 float x = 0;
@@ -122,7 +123,7 @@ public class Enemy
     {
         if (shape == "square")
         {
-            Raylib.DrawRectanglePro(this.hitbox, new Vector2(this.size,this.size) / 2, (float)angle, color);
+            Raylib.DrawRectanglePro(this.hitbox, new Vector2(this.size, this.size) / 2, (float)angle, color);
         }
         else if (shape == "circle")
         {
@@ -130,7 +131,7 @@ public class Enemy
         }
         else if (shape == "ring")
         {
-            Raylib.DrawRing(this.hitbox.Position,this.size/4,this.size/2,0,360,100,color);
+            Raylib.DrawRing(this.hitbox.Position, this.size / 4, this.size / 2, 0, 360, 100, color);
         }
         else if (shape == "triangle")
         {
@@ -168,6 +169,7 @@ public class Enemy
                 Raylib.DrawCircleV(point3, 5, Color.White);
             }
         }
+        else throw null; // make it crash; I dont want invisble enemies
     }
 }
 

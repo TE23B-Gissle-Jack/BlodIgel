@@ -31,7 +31,6 @@ while (!Raylib.WindowShouldClose())
     Raylib.ClearBackground(Color.Black);
     //Raylib.DrawRectangleRec(player.hitbox,Color.DarkPurple);
 
-
     player.Update(friendlyBullets);
     
     for (int i = 0; i < friendlyBullets.Count; i++)
@@ -45,7 +44,10 @@ while (!Raylib.WindowShouldClose())
                 if (enemies[j].alive)
                 {
                     int damageTaken = friendlyBullets[i].CheckCollide(enemy.hitbox.Position,enemy.size);
-                    enemy.takeDamage(damageTaken);
+                    if (damageTaken>0)
+                    {
+                        enemy.takeDamage(damageTaken);
+                    }
                 }
             }
         }

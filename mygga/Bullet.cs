@@ -5,13 +5,14 @@ using Raylib_cs;
 
 namespace mygga;
 
-public class Bullet(bool friendly, Vector2 position, Vector2 velocity)
+public class Bullet(bool friendly, Vector2 position, Vector2 velocity, int damage)
 {
     public Vector2 position = position;
     public Vector2 velocity = velocity; //dumb naming
     
     public int piercing = 0;
     public bool alive = true;
+    public int dmg = damage;
     
     int collisions = 0;
 
@@ -34,7 +35,7 @@ public class Bullet(bool friendly, Vector2 position, Vector2 velocity)
             {
                 alive = false;
             }
-            return 100;
+            return dmg;
         }
         return 0;
     }
