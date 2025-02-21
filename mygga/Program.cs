@@ -7,12 +7,16 @@ Raylib.SetTargetFPS(60);
 int screenHeight = Raylib.GetScreenHeight();
 int screenWidth = Raylib.GetScreenWidth();
 
-Player player = new Player(new (400,400),10, 2);
-
 
 List<Bullet> friendlyBullets = new List<Bullet>();
+List<Acid> acidPools = new List<Acid>();
 List<Enemy> enemies = new List<Enemy>();
 List<Exp> expPoints = new List<Exp>();
+
+Player player = new Player(new (400,400),10, 2,friendlyBullets);
+
+Wepon gunnar = new Wepon(1,100,0,4,player);
+Wepon satan = new Wepon(2,100,50,4,player){pools = acidPools};
 
 Enemy redSqr = new Enemy(player,new(500,300),50,5,40,expPoints,Color.Red,"square");
 Enemy blueCirc = new Enemy(player,new(500,300),50,5,40,expPoints,Color.Blue,"circle");
@@ -23,6 +27,9 @@ Enemy[] wave1 = [redSqr,blueCirc,greenTriangle,orangeRing];
 int[] wave1Amt = [10,10,10,10];
 SpawnEnemies(wave1Amt,wave1);
 
+//temporary
+player.wepons.Add(satan);
+
 
 while (!Raylib.WindowShouldClose())
 {
@@ -31,7 +38,7 @@ while (!Raylib.WindowShouldClose())
     Raylib.ClearBackground(Color.Black);
     //Raylib.DrawRectangleRec(player.hitbox,Color.DarkPurple);
 
-    player.Update(friendlyBullets);
+    player.Update();
     
     for (int i = 0; i < friendlyBullets.Count; i++)
     {
@@ -51,6 +58,10 @@ while (!Raylib.WindowShouldClose())
                 }
             }
         }
+    }
+    for (int i = 0; i < acidPools.Count; i++)
+    {
+        acidPools[i].Update(enemies);
     }
     for (int i = 0; i < enemies.Count; i++)
     {
