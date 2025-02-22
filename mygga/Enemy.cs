@@ -24,6 +24,11 @@ public class Enemy
     double angle;
     Color color;
     Player player;
+
+    Color currentColor;
+    int timeInWrongColor = 0;
+    int colorChangeTime = 10;
+
     //enemy template
     public Enemy(Player hero, Vector2 p, int h, float s, float ss, List<Exp> exp, Color colo, string type)
     {
@@ -63,6 +68,17 @@ public class Enemy
             //Raylib.DrawRectanglePro(this.hitbox, this.size / 2, (float)angle, color);
             Move();
             CheckDistans(fellows);
+
+            if (currentColor.R != color.R || currentColor.G != color.G ||
+                currentColor.B != color.B || currentColor.A != color.A)
+            {
+                if (timeInWrongColor == colorChangeTime)
+                {
+                    currentColor = color;
+                    timeInWrongColor = 0;
+                }
+                timeInWrongColor++;
+            }
         }
     }
     public void Move()
@@ -79,6 +95,7 @@ public class Enemy
     public void takeDamage(int dmg)
     {
         hp -= dmg;
+        currentColor = new(100,30,30);//make red
         if (hp <= 0)
         {
             Die();
@@ -123,15 +140,15 @@ public class Enemy
     {
         if (shape == "square")
         {
-            Raylib.DrawRectanglePro(this.hitbox, new Vector2(this.size, this.size) / 2, (float)angle, color);
+            Raylib.DrawRectanglePro(this.hitbox, new Vector2(this.size, this.size) / 2, (float)angle, currentColor);
         }
         else if (shape == "circle")
         {
-            Raylib.DrawCircleV(this.hitbox.Position, this.size / 2, color);
+            Raylib.DrawCircleV(this.hitbox.Position, this.size / 2, currentColor);
         }
         else if (shape == "ring")
         {
-            Raylib.DrawRing(this.hitbox.Position, this.size / 4, this.size / 2, 0, 360, 100, color);
+            Raylib.DrawRing(this.hitbox.Position, this.size / 4, this.size / 2, 0, 360, 100, currentColor);
         }
         else if (shape == "triangle")
         {
@@ -156,7 +173,7 @@ public class Enemy
             point3 += this.hitbox.Position;
 
 
-            Raylib.DrawTriangle(point3, point2, point1, color);// stupid counterclockwise
+            Raylib.DrawTriangle(point3, point2, point1, currentColor);// stupid counterclockwise
 
             if (false)
             {

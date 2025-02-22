@@ -15,8 +15,8 @@ List<Exp> expPoints = new List<Exp>();
 
 Player player = new Player(new (400,400),10, 2,friendlyBullets);
 
-Wepon gunnar = new Wepon(1,100,0,4,player);
-Wepon satan = new Wepon(2,100,50,4,player){pools = acidPools};
+Wepon gunnar = new Wepon(1,25,0,3,player);
+Wepon satan = new Wepon(2,10,50,4,player){pools = acidPools};
 
 Enemy redSqr = new Enemy(player,new(500,300),50,5,40,expPoints,Color.Red,"square");
 Enemy blueCirc = new Enemy(player,new(500,300),50,5,40,expPoints,Color.Blue,"circle");
@@ -28,7 +28,8 @@ int[] wave1Amt = [10,10,10,10];
 SpawnEnemies(wave1Amt,wave1);
 
 //temporary
-player.wepons.Add(satan);
+//player.wepons.Add(satan);
+player.wepons.Add(gunnar);
 
 
 while (!Raylib.WindowShouldClose())

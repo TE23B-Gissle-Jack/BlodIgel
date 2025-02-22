@@ -13,6 +13,8 @@ public class Bullet(bool friendly, Vector2 position, Vector2 velocity, int damag
     public int piercing = 0;
     public bool alive = true;
     public int dmg = damage;
+
+    int size = 6;
     
     int collisions = 0;
 
@@ -20,7 +22,7 @@ public class Bullet(bool friendly, Vector2 position, Vector2 velocity, int damag
     {   
         if (alive)
         {
-            Raylib.DrawCircleV(position,10,Color.Yellow);
+            Raylib.DrawCircleV(position,size,Color.Yellow);
             position+=velocity;
         }
     }
@@ -28,7 +30,7 @@ public class Bullet(bool friendly, Vector2 position, Vector2 velocity, int damag
     public int CheckCollide(Vector2 targetPosition, float tragetSize)
     {
         //Raylib.DrawCircleV(targetPosition,tragetSize/2,Color.Blue);
-        if (Raylib.CheckCollisionCircles(position,5,targetPosition,tragetSize/2))
+        if (Raylib.CheckCollisionCircles(position,size/2,targetPosition,tragetSize/2))
         {
             collisions++;
             if (collisions>piercing)
