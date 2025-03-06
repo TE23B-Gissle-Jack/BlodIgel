@@ -1,1 +1,32 @@
 what the ᛊᛁᚷᚷᛗᚨ
+
+        vapire survivors garlic{
+
+            *is a weapon and has area
+            *assigne position as player location
+            *has a coolDown bettwen damage ticks
+
+            -every frame draw a circle with the area assigned
+            -check wich enemies are inside the area
+            -deal damage if coolDown is at zero
+            -increase coolDown to determined amount
+        }
+        
+        Level Up{
+
+            -pause game
+
+            give options for inprovemnts{
+
+                1-check wich wepons player has
+                -check if weapon is not at max level
+                -give options for upgrades on current weapons
+                -increase level for weapon picked
+
+                2-check if player has maximum amount of diffrent weapon(4)
+                -give options for weapons not already had
+
+                3-if max weapon held and max level weapons
+                -give option for increased max hp or healing
+            }
+        }
