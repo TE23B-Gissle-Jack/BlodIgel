@@ -1,23 +1,54 @@
 using System;
 using System.Numerics;
+using Microsoft.VisualBasic;
 
 namespace mygga;
 
-public class Wepon(int type, int dmg, float area, int amt, Player player)
+public class Wepon
 {
     public List<Acid> pools;
+    Player player;
 
     int coolDown = 0;
-    int coolGuy  = 100;
+    int coolGuy = 100;
     int bulletTokill = 0;
+
+
+    public string name;
+    int weaponType;
+    public int damage;
+    public int area;
+    public int amount;
+
+    public bool[] upgradeble = new bool[3];
+
+    public Wepon(int type, int dmg, int aoe, int amt, Player p1)
+    {
+        weaponType = type;
+        damage = dmg;
+        area = aoe;
+        amount = amt;
+        player = p1;
+        pools = new List<Acid>();
+        if (type == 0)                  //could do bool[][]// i think
+        {
+            upgradeble = [true, false, true];
+            name = "Gun";
+        }
+        else if(type == 1)
+        {
+           upgradeble = [true, true, true]; 
+           name = "Acid Pools";
+        }
+    }
 
     public void Attack()
     {
-        if (type == 1)
+        if (weaponType == 0)
         {
             Gun();
         }
-        if (type == 2)
+        if (weaponType == 1)
         {
             Santa();
         }
@@ -27,7 +58,7 @@ public class Wepon(int type, int dmg, float area, int amt, Player player)
     {
         if (coolDown == 0)
         {
-           pools.Add(new Acid(dmg,area,pools));
+            pools.Add(new Acid(damage, area, pools));
         }
     }
 
@@ -37,12 +68,12 @@ public class Wepon(int type, int dmg, float area, int amt, Player player)
 
         float diffAngle = 5 * (MathF.PI / 180f);
         int piercing;
-        if (amt % 2 == 0) radians -= diffAngle * amt / 2;
-        else radians -= diffAngle * (int)(amt / 2);
-        for (int i = 0; i < amt; i++)
+        if (amount % 2 == 0) radians -= diffAngle * amount / 2;
+        else radians -= diffAngle * (int)(amount / 2);
+        for (int i = 0; i < amount; i++)
         {
             radians += diffAngle;
-            MakeBullet(player.friendlyBullets, radians, dmg);
+            MakeBullet(player.friendlyBullets, radians, damage);
         }
     }
 

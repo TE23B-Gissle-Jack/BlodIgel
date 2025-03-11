@@ -15,6 +15,9 @@ public class Player
     public Vector2 size;
     public List<Bullet> friendlyBullets;
 
+    List<UpgradeCard> upgradeCards = new List<UpgradeCard>();
+
+    public bool isLeveling = false;
     int level = 0;
     public int levelReq = 10;
     public int exp = 0;
@@ -40,7 +43,6 @@ public class Player
 
         Vector2 mousePos = Raylib.GetMousePosition();
         angle = Math.Atan2(mousePos.Y - hitbox.Y, mousePos.X - hitbox.X) * (180 / Math.PI);
-        Raylib.DrawRectanglePro(hitbox, size / 2, (float)angle, Color.DarkPurple);
 
         if (exp >= levelReq)
         {
@@ -50,6 +52,20 @@ public class Player
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             Attack();
+        }
+    }
+
+    public void Draw()
+    {
+        Raylib.DrawRectanglePro(hitbox, size / 2, (float)angle, Color.DarkPurple);
+
+        //draw upgrade cards
+        if (isLeveling)
+        {
+            for (int i = 0; i < upgradeCards.Count; i++)
+            {
+                isLeveling = !upgradeCards[i].Update();
+            }
         }
     }
 
@@ -88,7 +104,14 @@ public class Player
         //Console.Beep();
         exp -= levelReq;
         level++;
+        isLeveling = true;
         levelReq = (int)double.Round(levelReq * 1.5);
+        for (int i = 0; i < 3; i++)
+        {
+            Vector2 position = new((Raylib.GetScreenWidth()/3)*(i)+30,200);
+            upgradeCards.Add(new UpgradeCard(wepons,position));
+        }
+        
     }
     
 }

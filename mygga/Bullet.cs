@@ -23,10 +23,12 @@ public class Bullet(bool friendly, Vector2 position, Vector2 velocity, int damag
         if (alive)
         {
             Raylib.DrawCircleV(position,size,Color.Yellow);
-            position+=velocity;
         }
     }
-
+    public void Move()
+    {
+        position+=velocity;
+    }
     public int CheckCollide(Vector2 targetPosition, float tragetSize)
     {
         //Raylib.DrawCircleV(targetPosition,tragetSize/2,Color.Blue);

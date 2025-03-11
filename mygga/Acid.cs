@@ -18,7 +18,6 @@ public class Acid(int damage, float s, List<Acid> acidPools)
         if (lifeTime >= 0)
         {
             size = ogSize * lifeTime / ogLifeTime;
-            Raylib.DrawCircleV(position, size, color);
             lifeTime--;
             if (dmgCooldown==0)
             {
@@ -35,5 +34,9 @@ public class Acid(int damage, float s, List<Acid> acidPools)
             dmgCooldown--;
         }
         else acidPools.Remove(this);
+    }
+    public void Draw()
+    {
+        Raylib.DrawCircleV(position, size, color);
     }
 }

@@ -64,7 +64,6 @@ public class Enemy
         if (alive)
         {
             angle = Math.Atan2(hitbox.Y - player.hitbox.Y, hitbox.X - player.hitbox.X) * (180 / Math.PI);
-            Draw();
             //Raylib.DrawRectanglePro(this.hitbox, this.size / 2, (float)angle, color);
             Move();
             CheckDistans(fellows);
